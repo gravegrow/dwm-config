@@ -1,0 +1,21 @@
+#!/bin/bash
+
+case $BUTTON in 
+  1) notify-send "clock 1";;
+  2) notify-send "clock 2";;
+  3) notify-send "clock 3";;
+esac
+
+barcolor=#11111A
+widgetcolor=#8AADF4
+panelcolor=#1E2030
+
+if [[ $1 ]]
+then
+  printf "^b$widgetcolor^^c$barcolor^ "
+  printf "󰃰"
+else
+  printf "^c$widgetcolor^^b$panelcolor^ "
+  date "+%d %a %H:%M"
+fi
+

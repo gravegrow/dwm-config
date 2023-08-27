@@ -1,0 +1,12 @@
+#!/bin/bash
+
+case $BUTTON in 
+  1) notify-send "power 1";;
+  2) notify-send "power 2";;
+  3) notify-send "power 3";;
+esac
+
+barcolor=#11111A
+widgetcolor=#ED8796
+
+printf "^c$widgetcolor^^b$barcolor^  "

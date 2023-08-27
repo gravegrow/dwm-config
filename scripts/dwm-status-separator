@@ -1,0 +1,3 @@
+#!/bin/bash
+
+printf "^c#11111A^^b#11111A^"
