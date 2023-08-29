@@ -36,7 +36,7 @@ packages=(
   pipewire pavucontrol libspa-0.2-bluetooth alsa-utils
 
   # utils
-  x11-utils psmisc unzip curl btop zram-tools
+  x11-utils psmisc unzip curl btop zram-tools bat
 
   # buld neovim
   ninja-build gettext cmake
@@ -65,8 +65,12 @@ sudo nala install ${packages[@]} -y
 
 
 # Setup lightdm
-sudo sed -i 's/#greeter-hide-users=false/greeter-hide-users=false/g' /etc/lightdm/lightdm.conf
+wget https://raw.githubusercontent.com/canonical/lightdm/master/debian/lightdm-session
+chmod +x lightdm-session
+sudo cp lightdm-session /usr/sbin/lightdm-session
 
+sudo sed -i 's/#greeter-hide-users=false/greeter-hide-users=false/g' /etc/lightdm/lightdm.conf
+sudo sed -i 's/#session-wrapper=lightdm-session/session-wrapper=lightdm-session/g' /etc/lightdm/lightdm.conf
 
 # Setup swap
 sudo sed -i 's/#ALGO.*/ALGO=zstd/g' /etc/default/zramswap
@@ -82,6 +86,8 @@ sudo make -C $BASEDIR/dwmblocks/ clean install
 
 # Add dwm scripts to path
 cat >> ~/.profile << EOF
+
+# add dwm scripts to path
 if [[ ! -d "$(realpath $BASEDIR/scripts)" ]] ; then
   PATH="$(realpath $BASEDIR/scripts):tempvar"
 fi
@@ -89,10 +95,10 @@ EOF
 
 sed -i 's/tempvar/$PATH/g' ~/.profile # tempvar to avod path unpacking
 
-cat > ~/.xsessionrc<< EOF
-#!/bin/bash
-. ~/.profile
-EOF
+# cat > ~/.xsessionrc<< EOF
+# #!/bin/bash
+# . ~/.profile
+# EOF
 
 
 # Create desktop entry for DWM
