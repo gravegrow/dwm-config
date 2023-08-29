@@ -51,8 +51,10 @@ packages=(
   lightdm
 
   # dwm build requirements
-  make build-essential libx11-dev libxft-dev libimlib2-dev libxinerama-dev xinit libx11-xcb-dev libxcb-res0-dev -y
+  make build-essential libx11-dev libxft-dev libimlib2-dev libxinerama-dev xinit libx11-xcb-dev libxcb-res0-dev
 )
+
+sudo nala install ${packages[@]} -y
 
 # NIX
 # curl -L https://nixos.org/nix/install | sh -s -- --daemon --yes
@@ -80,12 +82,12 @@ sudo make -C $BASEDIR/dwmblocks/ clean install
 
 # Add dwm scripts to path
 cat >> ~/.profile << EOF
-if [[ ! -d "$BASEDIR/scripts" ]] ; then
-  PATH="$BASEDIR/scripts:TMPPATH"
+if [[ ! -d "$(realpath $BASEDIR/scripts)" ]] ; then
+  PATH="$(realpath $BASEDIR/scripts):tempvar"
 fi
 EOF
 
-sed -i 's/TMPPATH/$PATH/g' ~/.profile
+sed -i 's/tempvar/$PATH/g' ~/.profile # tempvar to avod path unpacking
 
 cat > ~/.xsessionrc<< EOF
 #!/bin/bash
@@ -157,7 +159,3 @@ curl -s https://api.github.com/repos/starship/starship/releases/latest \
 tar xvf starship-*.tar.gz
 sudo mv starship /usr/local/bin/
 rm starship*
-
-if  ! grep -q "starship" $HOME/.config/fish/config.fish ; then
-  echo "starship init fish | source" >> $HOME/.config/fish/config.fish
-fi
