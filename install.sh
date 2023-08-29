@@ -140,9 +140,12 @@ if [[ ! -d $HOME/.local/share/fonts ]]; then
     mkdir -p $HOME/.local/share/fonts 
 fi
 
-wget "https://github.com/ryanoasis/nerd-fonts/releases/download/v3.0.2/JetBrainsMono.zip"
-unzip -o JetBrainsMono.zip -d $HOME/.local/share/fonts
-rm JetBrainsMono.zip 
+
+if [[! -f ~/.local/share/fonts/JetBrains* ]]; then
+  wget "https://github.com/ryanoasis/nerd-fonts/releases/download/v3.0.2/JetBrainsMono.zip"
+  unzip -o JetBrainsMono.zip -d $HOME/.local/share/fonts
+  rm JetBrainsMono.zip 
+fi
 
 # Build Neovim
 git clone https://github.com/neovim/neovim
