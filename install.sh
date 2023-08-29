@@ -88,17 +88,12 @@ sudo make -C $BASEDIR/dwmblocks/ clean install
 cat >> ~/.profile << EOF
 
 # add dwm scripts to path
-if [[ ! -d "$(realpath $BASEDIR/scripts)" ]] ; then
+if [ -d "$(realpath $BASEDIR/scripts)" ] ; then
   PATH="$(realpath $BASEDIR/scripts):tempvar"
 fi
 EOF
 
 sed -i 's/tempvar/$PATH/g' ~/.profile # tempvar to avod path unpacking
-
-# cat > ~/.xsessionrc<< EOF
-# #!/bin/bash
-# . ~/.profile
-# EOF
 
 
 # Create desktop entry for DWM
@@ -136,7 +131,7 @@ rm ./tmp
 
 
 # Install required font
-if [[ ! -d $HOME/.local/share/fonts ]]; then
+if [ ! -d $HOME/.local/share/fonts ] ; then
     mkdir -p $HOME/.local/share/fonts 
 fi
 
