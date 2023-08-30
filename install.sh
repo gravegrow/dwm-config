@@ -12,13 +12,13 @@ setfont /usr/share/consolefonts/CyrAsia-TerminusBold22x11.psf.gz
 
 # Install nala
 sudo apt install nala -y
-
 packages=(
   # terminal
   fish kitty tmux
 
   # editor
-  vim
+  # vim 
+  # buld neovim later
 
   # launchers
   rofi suckless-tools
@@ -36,7 +36,7 @@ packages=(
   pipewire pavucontrol libspa-0.2-bluetooth alsa-utils
 
   # utils
-  x11-utils psmisc unzip curl btop zram-tools bat
+  x11-utils psmisc unzip curl btop zram-tools bat tldr
 
   # buld neovim
   ninja-build gettext cmake
@@ -150,6 +150,14 @@ git -C $BASEDIR/neovim checkout stable
 make -C $BASEDIR/neovim CMAKE_BUILD_TYPE=RelWithDebInfo 
 sudo make -C $BASEDIR/neovim install 
 rm neovim -rdf
+
+if [ ! -d $HOME/.local/share/applications ] ; then
+    mkdir -p $HOME/.local/share/applications 
+fi
+
+cp /usr/share/applications/nvim.desktop $HOME/.local/share/applications/
+sed -i 's/Exec=nvim/Exec=kitty -e nvim/g' $HOME/.local/share/applications/ 
+sed -i 's/Terminal=true/Terminal=false/g' $HOME/.local/share/applications/ 
 
 
 # Set fish as default shell
