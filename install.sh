@@ -155,9 +155,9 @@ if [ ! -d $HOME/.local/share/applications ] ; then
     mkdir -p $HOME/.local/share/applications 
 fi
 
-cp /usr/share/applications/nvim.desktop $HOME/.local/share/applications/
-sed -i 's/Exec=nvim/Exec=kitty -e nvim/g' $HOME/.local/share/applications/ 
-sed -i 's/Terminal=true/Terminal=false/g' $HOME/.local/share/applications/ 
+cp /usr/local/share/applications/nvim.desktop $HOME/.local/share/applications/
+sed -i 's/Exec=nvim/Exec=kitty -e nvim/g' $HOME/.local/share/applications/nvim.desktop
+sed -i 's/Terminal=true/Terminal=false/g' $HOME/.local/share/applications/nvim.desktop  
 
 
 # Set fish as default shell
