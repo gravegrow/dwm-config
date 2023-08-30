@@ -39,7 +39,10 @@ packages=(
 
   # utils
   x11-utils psmisc unzip curl  zram-tools 
-  btop bat tldr python3-pip ripgrep fd-find
+  btop bat tldr python3-pip ripgrep fd-find 
+
+  # picom
+  picom
 
   # buld neovim
   ninja-build gettext cmake
