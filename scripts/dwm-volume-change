@@ -1,0 +1,24 @@
+#!/bin/bash
+
+value=$1
+
+function volume-change() {
+  if [ $value = "toggle" ] ; then
+    wpctl set-mute @DEFAULT_AUDIO_SINK@ "toggle"
+    value="0%+"
+    
+    if wpctl get-volume @DEFAULT_AUDIO_SINK@ | grep -q "MUTED" ; then
+      # notify-send "Muted"
+      return 
+    fi
+  fi
+
+  wpctl set-mute @DEFAULT_AUDIO_SINK@ 0
+  wpctl set-volume @DEFAULT_AUDIO_SINK@ $value
+
+  # volume=$(wpctl get-volume @DEFAULT_AUDIO_SINK@ | sed "s/[^0-9]*//g" | sed "s/^0*//")
+  # notify-send "Volume: $volume%"
+}
+
+volume-change
+pkill -RTMIN+1 dwmblocks

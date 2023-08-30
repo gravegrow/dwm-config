@@ -1,21 +1,29 @@
 #!/bin/bash
 
 case $BUTTON in 
-  1) notify-send "volume 1";;
-  2) notify-send "volume 2";;
-  3) notify-send "volume 3";;
+  1) dwm-volume-change 5%+;;
+  2) dwm-volume-change "toggle";;
+  3) dwm-volume-change 5%-;;
 esac
 
 barcolor=#11111A
 widgetcolor=#A6DA95
 panelcolor=#1E2030
+icon="󰕾"
+
+value="$(wpctl get-volume @DEFAULT_AUDIO_SINK@ | sed "s/[^0-9]*//g" | sed "s/^0*//")%"
+if  wpctl get-volume @DEFAULT_AUDIO_SINK@ | grep -q "MUTED"  ; then
+  widgetcolor=#ED8796
+  value="MUTED"
+  icon="󰝟"
+fi
 
 if [[ $1 ]]
 then
   printf "^b$widgetcolor^^c$barcolor^ "
-  printf "󰕾"
+  echo $icon
 else
   printf "^c$widgetcolor^^b$panelcolor^ "
-  amixer sget Master | awk -F"[][]" '/Left:/ { print $2 }'
+  echo $value
 fi
 

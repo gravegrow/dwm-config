@@ -106,6 +106,13 @@ static const Layout layouts[] = {
 #define SHCMD(cmd) { .v = (const char*[]){ "/bin/sh", "-c", cmd, NULL } }
 
 #define STATUSBAR "dwmblocks"
+#include <X11/XF86keysym.h>
+
+/* If you use pipewire add somewhere in your constants definition section. Use "wpctl status" to
+   find out the real sink ID, 0 is a placeholder here. */
+static const char *upvol[]      = { "dwm-volume-change", "5%+",      NULL };
+static const char *downvol[]    = { "dwm-volume-change", "5%-",      NULL };
+static const char *mutevol[]    = { "dwm-volume-change", "toggle",   NULL };
 
 /* commands */
 static char dmenumon[2] = "0"; /* component of dmenucmd, manipulated in spawn() */
@@ -154,6 +161,10 @@ static const Key keys[] = {
 	TAGKEYS(                        XK_8,                      7)
 	TAGKEYS(                        XK_9,                      8)
 	{ MODKEY|ControlMask|ShiftMask, XK_r,      quit,           {0} },
+
+	{ 0,                       XF86XK_AudioLowerVolume, spawn, {.v = downvol } },
+	{ 0,                       XF86XK_AudioMute, spawn, {.v = mutevol } },
+	{ 0,                       XF86XK_AudioRaiseVolume, spawn, {.v = upvol   } },
 };
 
 /* button definitions */
