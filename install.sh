@@ -40,7 +40,7 @@ packages=(
   # utils
   x11-utils psmisc unzip curl  zram-tools 
   btop bat tldr python3-pip ripgrep fd-find 
-  blueman
+  blueman gnome-calculator gnome-calendar
 
   # picom
   picom
@@ -56,7 +56,7 @@ packages=(
   firefox-esr
 
   # misc
-  qbittorrent
+  qbittorrent keepassxc
 
   # display manager
   lightdm
