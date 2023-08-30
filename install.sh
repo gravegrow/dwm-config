@@ -7,7 +7,7 @@
 # fi
 
 sudo apt update
-sudo apt ugrade 
+sudo apt upgrade 
 
 # Set console font
 sudo apt install fonts-terminus -y
@@ -184,8 +184,7 @@ rm starship*
 
 # dotfiles
 git clone --bare https://github.com/gravegrow/dotfiles ~/.dotfiles
-alias dotfiles='git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME'
-dotfiles checkout 2>&1 | egrep "\s+\." | awk {'print $1'} | xargs -I{} rm -rdf {} .config-backup/{}
-dotfiles checkout
-dotfiles config --local status.showUntrackedFiles no
+git checkout --git-dir=$HOME/.dotfiles/ --work-tree=$HOME  2>&1 | egrep "\s+\." | awk {'print $1'} | xargs -I{} rm -rdf {} .config-backup/{}
+git checkout --git-dir=$HOME/.dotfiles/ --work-tree=$HOME 
+git config --git-dir=$HOME/.dotfiles/ --work-tree=$HOME  --local status.showUntrackedFiles no
 
