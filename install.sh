@@ -6,6 +6,9 @@
 #   exit
 # fi
 
+sudo apt update
+sudo apt ugrade 
+
 # Set console font
 sudo apt install fonts-terminus -y
 setfont /usr/share/consolefonts/CyrAsia-TerminusBold22x11.psf.gz
@@ -18,7 +21,6 @@ packages=(
 
   # editor
   # vim 
-  # buld neovim later
 
   # launchers
   rofi suckless-tools
@@ -36,10 +38,15 @@ packages=(
   pipewire pavucontrol libspa-0.2-bluetooth alsa-utils
 
   # utils
-  x11-utils psmisc unzip curl btop zram-tools bat tldr
+  x11-utils psmisc unzip curl  zram-tools 
+  btop bat tldr python3-pip ripgrep fd-find
 
   # buld neovim
   ninja-build gettext cmake
+
+  # config neovim 
+  
+  python3-neovim ruby npm
 
   # browsers
   firefox-esr
@@ -140,7 +147,7 @@ fi
 
 if [[! -f ~/.local/share/fonts/JetBrains* ]]; then
   wget "https://github.com/ryanoasis/nerd-fonts/releases/download/v3.0.2/JetBrainsMono.zip"
-  unzip -o JetBrainsMono.zip -d $HOME/.local/share/fonts
+  unzip -oq JetBrainsMono.zip -d $HOME/.local/share/fonts
   rm JetBrainsMono.zip 
 fi
 
@@ -171,6 +178,14 @@ curl -s https://api.github.com/repos/starship/starship/releases/latest \
   | cut -d '"' -f 4 \
   | wget -qi -
 
-tar xvf starship-*.tar.gz
+tar -zxf starship-*.tar.gz
 sudo mv starship /usr/local/bin/
 rm starship*
+
+# dotfiles
+git clone --bare https://github.com/gravegrow/dotfiles ~/.dotfiles
+alias dotfiles='git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME'
+dotfiles checkout 2>&1 | egrep "\s+\." | awk {'print $1'} | xargs -I{} rm -rdf {} .config-backup/{}
+dotfiles checkout
+dotfiles config --local status.showUntrackedFiles no
+
