@@ -67,7 +67,7 @@ sudo nala install ${packages[@]} -y
 # Setup lightdm
 wget https://raw.githubusercontent.com/canonical/lightdm/master/debian/lightdm-session
 chmod +x lightdm-session
-sudo cp lightdm-session /usr/sbin/lightdm-session
+sudo mv lightdm-session /usr/sbin/lightdm-session
 
 sudo sed -i 's/#greeter-hide-users=false/greeter-hide-users=false/g' /etc/lightdm/lightdm.conf
 sudo sed -i 's/#session-wrapper=lightdm-session/session-wrapper=lightdm-session/g' /etc/lightdm/lightdm.conf
@@ -83,6 +83,8 @@ BASEDIR=$(dirname "$0")
 sudo make -C $BASEDIR/dwm/ clean install 
 sudo make -C $BASEDIR/dwmblocks/ clean install 
 
+sudo make -C $BASEDIR/dwm/ clean 
+sudo make -C $BASEDIR/dwmblocks/ clean
 
 # Add dwm scripts to path
 cat >> ~/.profile << EOF
@@ -147,6 +149,7 @@ git clone https://github.com/neovim/neovim
 git -C $BASEDIR/neovim checkout stable
 make -C $BASEDIR/neovim CMAKE_BUILD_TYPE=RelWithDebInfo 
 sudo make -C $BASEDIR/neovim install 
+rm neovim -rdf
 
 
 # Set fish as default shell

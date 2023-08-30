@@ -22,7 +22,7 @@ static const int user_bh            = 4;        /* 2 is the default spacing arou
 static const int showbar            = 1;        /* 0 means no bar */
 static const int topbar             = 1;        /* 0 means bottom bar */
 static const char *fonts[]          = { "JetBrainsMono Nerd Font:style:medium:size=8" };
-static const char dmenufont[]       = "JetBrainsMono Nerd Font:style:bold:size=8";
+static const char dmenufont[]       = "JetBrainsMono Nerd Font:style:medium:size=13";
 
 static const unsigned int ulinepad	= 5;	/* horizontal padding between the underline and tag */
 static const unsigned int ulinestroke	= 2;	/* thickness / height of the underline */
