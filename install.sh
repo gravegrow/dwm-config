@@ -71,7 +71,7 @@ sudo nala install ${packages[@]} -y
 # fi
 
 
-# Setup lightdm
+# Setup lightdm session-wrapper so it can source .profile
 wget https://raw.githubusercontent.com/canonical/lightdm/master/debian/lightdm-session
 chmod +x lightdm-session
 sudo mv lightdm-session /usr/sbin/lightdm-session
@@ -145,26 +145,29 @@ if [ ! -d $HOME/.local/share/fonts ] ; then
 fi
 
 
-if [[! -f ~/.local/share/fonts/JetBrains* ]]; then
+if [[ ! -f ~/.local/share/fonts/JetBrains* ]]; then
   wget "https://github.com/ryanoasis/nerd-fonts/releases/download/v3.0.2/JetBrainsMono.zip"
   unzip -oq JetBrainsMono.zip -d $HOME/.local/share/fonts
   rm JetBrainsMono.zip 
 fi
 
 # Build Neovim
-git clone https://github.com/neovim/neovim
-git -C $BASEDIR/neovim checkout stable
-make -C $BASEDIR/neovim CMAKE_BUILD_TYPE=RelWithDebInfo 
-sudo make -C $BASEDIR/neovim install 
-rm neovim -rdf
+if [ ! -f /usr/bin/nvim ] ; then
+  git clone https://github.com/neovim/neovim
+  git -C $BASEDIR/neovim checkout stable
+  make -C $BASEDIR/neovim CMAKE_BUILD_TYPE=RelWithDebInfo 
+  sudo make -C $BASEDIR/neovim install 
+  rm neovim -rdf
 
-if [ ! -d $HOME/.local/share/applications ] ; then
-    mkdir -p $HOME/.local/share/applications 
+  if [ ! -d $HOME/.local/share/applications ] ; then
+      mkdir -p $HOME/.local/share/applications 
+  fi
+
+  cp -rf /usr/local/share/applications/nvim.desktop $HOME/.local/share/applications/
+  sed -i 's/Exec=nvim/Exec=kitty -e nvim/g' $HOME/.local/share/applications/nvim.desktop
+  sed -i 's/Terminal=true/Terminal=false/g' $HOME/.local/share/applications/nvim.desktop  
 fi
 
-cp /usr/local/share/applications/nvim.desktop $HOME/.local/share/applications/
-sed -i 's/Exec=nvim/Exec=kitty -e nvim/g' $HOME/.local/share/applications/nvim.desktop
-sed -i 's/Terminal=true/Terminal=false/g' $HOME/.local/share/applications/nvim.desktop  
 
 
 # Set fish as default shell
@@ -172,17 +175,23 @@ sudo chsh $USER -s $(which fish)
 
 
 # Install Starship
-curl -s https://api.github.com/repos/starship/starship/releases/latest \
-  | grep browser_download_url \
-  | grep x86_64-unknown-linux-gnu \
-  | cut -d '"' -f 4 \
-  | wget -qi -
+if [ ! -f /usr/local/bin/starship ] ; then
+  curl -s https://api.github.com/repos/starship/starship/releases/latest \
+    | grep browser_download_url \
+    | grep x86_64-unknown-linux-gnu \
+    | cut -d '"' -f 4 \
+    | wget -qi -
 
-tar -zxf starship-*.tar.gz
-sudo mv starship /usr/local/bin/
-rm starship*
+  tar -zxf starship-*.tar.gz
+  sudo mv starship /usr/local/bin/
+  rm starship*
+fi
 
 # dotfiles
+if [ -d $HOME/.dotfiles ] ; then
+  rm -rdf $HOME/.dotfiles
+fi
+
 git clone --bare https://github.com/gravegrow/dotfiles ~/.dotfiles
 git checkout --git-dir=$HOME/.dotfiles/ --work-tree=$HOME  2>&1 | egrep "\s+\." | awk {'print $1'} | xargs -I{} rm -rdf {} .config-backup/{}
 git checkout --git-dir=$HOME/.dotfiles/ --work-tree=$HOME 
