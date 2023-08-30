@@ -145,9 +145,9 @@ if [ ! -d $HOME/.local/share/fonts ] ; then
 fi
 
 
-if [[ ! -f ~/.local/share/fonts/JetBrains* ]]; then
+if [ ! -d $HOME/.local/share/fonts/JetBrainsMono ]; then
   wget "https://github.com/ryanoasis/nerd-fonts/releases/download/v3.0.2/JetBrainsMono.zip"
-  unzip -oq JetBrainsMono.zip -d $HOME/.local/share/fonts
+  unzip -oq JetBrainsMono.zip -d $HOME/.local/share/fonts/JetBrainsMono
   rm JetBrainsMono.zip 
 fi
 
@@ -192,8 +192,22 @@ if [ -d $HOME/.dotfiles ] ; then
   rm -rdf $HOME/.dotfiles
 fi
 
-git clone --bare https://github.com/gravegrow/dotfiles ~/.dotfiles
-git checkout --git-dir=$HOME/.dotfiles/ --work-tree=$HOME  2>&1 | egrep "\s+\." | awk {'print $1'} | xargs -I{} rm -rdf {} .config-backup/{}
-git checkout --git-dir=$HOME/.dotfiles/ --work-tree=$HOME 
-git config --git-dir=$HOME/.dotfiles/ --work-tree=$HOME  --local status.showUntrackedFiles no
+git clone --bare https://github.com/gravegrow/dotfiles $HOME/.dotfiles
+
+function dotfiles {
+   /usr/bin/git --git-dir=$HOME/.dotfiles/ --work-tree=$HOME $@
+}
+
+mkdir -p .config-backup
+
+dotfiles checkout
+if [ $? = 0 ]; then
+  echo "Checked out config.";
+else
+  echo "Backing up pre-existing dot files.";
+  dotfiles checkout 2>&1 | egrep "\s+\." | awk {'print $1'} | xargs -I{} mv {} .config-backup/{}
+fi;
+dotfiles checkout  
+dotfiles config status.showUntrackedFiles no
+rm -rdf .config-backup
 
