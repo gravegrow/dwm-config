@@ -6,8 +6,8 @@
 #   exit
 # fi
 
-sudo apt update
-sudo apt upgrade 
+sudo apt update -y
+sudo apt upgrade -y
 
 # Set console font
 sudo apt install fonts-terminus -y
@@ -29,7 +29,7 @@ packages=(
   ranger nemo exa 
 
   # theming
-  feh lxappearance 
+  feh lxappearance qt6ct
    
   # notifications
   dunst libnotify-bin
@@ -212,9 +212,6 @@ xdg-mime default nemo.desktop inode/directory application/x-gnome-saved-search
 gsettings set org.gnome.desktop.default-applications.terminal exec kitty
 gsettings set org.nemo.desktop show-desktop-icons false
 
-# theming 
-mkdir -p "$HOME/.config/gtk-3.0"
-mkdir -p "$HOME/.config/gtk-4.0"
 
 # fonts
 if [ ! -d $HOME/.local/share/fonts ] ; then
@@ -233,11 +230,14 @@ if [ ! -d $HOME/.themes ] ; then
 fi
 
 # gtk
+mkdir -p "$HOME/.config/gtk-3.0"
+mkdir -p "$HOME/.config/gtk-4.0"
+
 THEME=Catppuccin-Mocha-Standard-Lavender-dark
 THEME_DIR=$HOME/.themes/$THEME
 
 wget "https://github.com/catppuccin/gtk/releases/download/v0.6.1/$THEME.zip"
-unzip -oq "$THEME.zip" $THEME_DIR
+unzip -oq "$THEME.zip" -d $HOME/.themes/
 rm "$THEME.zip"
 
 ln -sf "$THEME_DIR/gtk-4.0/assets" "$HOME/.config/gtk-4.0/assets"
