@@ -50,7 +50,7 @@ packages=(
 
   # config neovim 
   
-  python3-neovim ruby npm
+  ruby npm
 
   # browsers
   firefox-esr
@@ -160,6 +160,7 @@ if [ ! -f /usr/bin/nvim ] ; then
   cp -rf /usr/local/share/applications/nvim.desktop $HOME/.local/share/applications/
   sed -i 's/Exec=nvim %F/Exec=kitty -e nvim %F/g' $HOME/.local/share/applications/nvim.desktop
   sed -i 's/Terminal=true/Terminal=false/g' $HOME/.local/share/applications/nvim.desktop  
+  sudo nala install python3-neovim -y
 fi
 
 
