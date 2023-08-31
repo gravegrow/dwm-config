@@ -322,7 +322,7 @@ sudo sed -i 's/GRUB_TIMEOUT=.*/GRUB_TIMEOUT=0/g' /etc/default/grub
 
 convert -size 32x32 xc:black empty.png
 sudo mv empty.png /boot/grub/
-sudo sed -i 's/WALLPAPER=.*/WALLPAPER=/boot/grub/empty.png/g' /etc/alternatives/desktop-theme/grub/grub_background.sh
+sudo sed -i 's/WALLPAPER=.*/WALLPAPER=/boot/grub/empty.png/g' /usr/share/desktop-base/active-theme/grub/grub_background.sh
 
 sudo update-grub2
 
