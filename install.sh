@@ -28,7 +28,7 @@ packages=(
   ranger nemo exa 
 
   # theming
-  feh lxappearance qt6ct plymouth-themes
+  feh lxappearance qt6ct plymouth-themes imagemagick
    
   # notifications
   dunst libnotify-bin
@@ -319,6 +319,10 @@ rm dotLock/ -rdf
 sudo sed -i 's/#GRUB_GFXMODE=.*/GRUB_GFXMODE=1920x1080x32/g' /etc/default/grub
 sudo sed -i 's/GRUB_CMDLINE_LINUX_DEFAULT=.*/GRUB_CMDLINE_LINUX_DEFAULT="quiet splash"/g' /etc/default/grub
 sudo sed -i 's/GRUB_TIMEOUT=.*/GRUB_TIMEOUT=0/g' /etc/default/grub
+
+convert -size 32x32 xc:black empty.png
+sudo mv empty.png /boot/grub/
+sudo sed -i 's/WALLPAPER=.*/WALLPAPER=/boot/grub/empty.png/g' /etc/alternatives/desktop-theme/grub/grub_background.sh
 
 sudo update-grub2
 
