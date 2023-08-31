@@ -8,7 +8,6 @@
 
 sudo apt update -y
 sudo apt upgrade -y
-
 # Set console font
 sudo apt install fonts-terminus -y
 setfont /usr/share/consolefonts/CyrAsia-TerminusBold22x11.psf.gz
@@ -29,7 +28,7 @@ packages=(
   ranger nemo exa 
 
   # theming
-  feh lxappearance qt6ct
+  feh lxappearance qt6ct plymouth-themes
    
   # notifications
   dunst libnotify-bin
@@ -40,7 +39,7 @@ packages=(
   # utils
   x11-utils psmisc unzip curl  zram-tools 
   btop bat tldr python3-pip ripgrep fd-find 
-  virtualenv
+  virtualenv flatpak
 
   # picom
   picom
@@ -49,7 +48,6 @@ packages=(
   ninja-build gettext cmake
 
   # config neovim 
-  
   ruby npm
 
   # browsers
@@ -282,8 +280,8 @@ fi
 
 wget "https://github.com/alvatip/Nordzy-cursors/releases/download/v0.6.0/Nordzy-cursors-white.tar.gz"
 tar xzf Nordzy-cursors-white.tar.gz
-rm Nordzy-cursors-white.tar.gz
 mv Nordzy-cursors-white $HOME/.icons
+rm Nordzy-cursors-white* -rdf
 
 # icons
 git clone https://github.com/bikass/kora.git
@@ -309,4 +307,17 @@ gtk-xft-hintstyle=hintfull
 gtk-xft-rgba=none
 EOF
 
+# plymouth and grub
+git clone https://github.com/vikashraghavan/dotLock.git
+sudo cp -r ./dotLock/dotLock /usr/share/plymouth/themes/
+sudo plymouth-set-default-theme dotLock -R
+rm dotLock/ -rdf
 
+sudo sed -i 's/#GRUB_GFXMODE=.*/GRUB_GFXMODE=1920x1080x32/g' /etc/default/grub
+sudo sed -i 's/GRUB_CMDLINE_LINUX_DEFAULT=.*/GRUB_CMDLINE_LINUX_DEFAULT="quiet splash"/g' /etc/default/grub
+sudo sed -i 's/GRUB_TIMEOUT=.*/GRUB_TIMEOUT=0/g' /etc/default/grub
+
+sudo update-grub2
+
+# flatpak
+sudo flatpak remote-add --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo
