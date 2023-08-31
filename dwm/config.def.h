@@ -50,7 +50,7 @@ static const char *const autostart[] = {
   "setxkbmap", "us,ru", "-option", "grp:alt_space_toggle", NULL,
   "dwmblocks", NULL,
 	"dunst", NULL,
-  "/usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1", NULL, 
+  "/usr/lib/policykit-1-gnome/polkit-gnome-authentication-agent-1", NULL, 
 	NULL /* terminate */
 };
 
@@ -79,6 +79,7 @@ static const Rule rules[] = {
 	{ "Firefox", NULL,     NULL,           0,         0,          0,           0,        -1 },
 	{ "kitty",   NULL,     NULL,           0,         0,          1,           0,        -1 },
 	{ NULL,      NULL,     "Event Tester", 0,         0,          0,           1,        -1 }, /* xev */
+	{ "polkit-gnome-authentication-agent-1",NULL,     NULL,           0,         1,          0,           0,        -1 },
 };
 
 /* layout(s) */
