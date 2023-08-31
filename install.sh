@@ -40,7 +40,7 @@ packages=(
   # utils
   x11-utils psmisc unzip curl  zram-tools 
   btop bat tldr python3-pip ripgrep fd-find 
-  blueman gnome-calculator gnome-calendar
+  virtualenv
 
   # picom
   picom
@@ -56,7 +56,9 @@ packages=(
   firefox-esr
 
   # misc
-  qbittorrent keepassxc
+  qbittorrent keepassxc blueman 
+  gnome-calculator gnome-calendar
+  zathura zathura-pdf-poppler
 
   # display manager
   lightdm
@@ -143,18 +145,6 @@ sudo cp ./tmp /usr/share/xsessions/dwm.desktop
 rm ./tmp
 
 
-# Install required font
-if [ ! -d $HOME/.local/share/fonts ] ; then
-    mkdir -p $HOME/.local/share/fonts 
-fi
-
-
-if [ ! -d $HOME/.local/share/fonts/JetBrainsMono ]; then
-  wget "https://github.com/ryanoasis/nerd-fonts/releases/download/v3.0.2/JetBrainsMono.zip"
-  unzip -oq JetBrainsMono.zip -d $HOME/.local/share/fonts/JetBrainsMono
-  rm JetBrainsMono.zip 
-fi
-
 # Build Neovim
 if [ ! -f /usr/bin/nvim ] ; then
   git clone https://github.com/neovim/neovim
@@ -168,10 +158,9 @@ if [ ! -f /usr/bin/nvim ] ; then
   fi
 
   cp -rf /usr/local/share/applications/nvim.desktop $HOME/.local/share/applications/
-  sed -i 's/Exec=nvim/Exec=kitty -e nvim/g' $HOME/.local/share/applications/nvim.desktop
+  sed -i 's/Exec=nvim %F/Exec=kitty -e nvim %F/g' $HOME/.local/share/applications/nvim.desktop
   sed -i 's/Terminal=true/Terminal=false/g' $HOME/.local/share/applications/nvim.desktop  
 fi
-
 
 
 # Set fish as default shell
@@ -214,4 +203,100 @@ fi;
 dotfiles checkout  
 dotfiles config status.showUntrackedFiles no
 rm -rdf .config-backup
+
+# poetry
+curl -sSL https://install.python-poetry.org | python3 -
+
+# nemo 
+xdg-mime default nemo.desktop inode/directory application/x-gnome-saved-search
+gsettings set org.gnome.desktop.default-applications.terminal exec kitty
+gsettings set org.nemo.desktop show-desktop-icons false
+
+# theming 
+mkdir -p "$HOME/.config/gtk-3.0"
+mkdir -p "$HOME/.config/gtk-4.0"
+
+# fonts
+if [ ! -d $HOME/.local/share/fonts ] ; then
+    mkdir -p $HOME/.local/share/fonts 
+fi
+
+
+if [ ! -d $HOME/.local/share/fonts/JetBrainsMono ]; then
+  wget "https://github.com/ryanoasis/nerd-fonts/releases/download/v3.0.2/JetBrainsMono.zip"
+  unzip -oq JetBrainsMono.zip -d $HOME/.local/share/fonts/JetBrainsMono
+  rm JetBrainsMono.zip 
+fi
+
+if [ ! -d $HOME/.themes ] ; then 
+  mkdir $HOME/.themes
+fi
+
+# gtk
+THEME=Catppuccin-Mocha-Standard-Lavender-dark
+THEME_DIR=$HOME/.themes/$THEME
+
+wget "https://github.com/catppuccin/gtk/releases/download/v0.6.1/$THEME.zip"
+unzip -oq "$THEME.zip" $THEME_DIR
+rm "$THEME.zip"
+
+ln -sf "$THEME_DIR/gtk-4.0/assets" "$HOME/.config/gtk-4.0/assets"
+ln -sf "$THEME_DIR/gtk-4.0/gtk.css" "$HOME/.config/gtk-4.0/gtk.css"
+ln -sf "$THEME_DIR/gtk-4.0/gtk-dark.css" "$HOME/.config/gtk-4.0/gtk-dark.css"
+
+for ver in "gtk-3.0" "gtk-4.0"
+do
+cat >> $THEME_DIR/$ver/gtk.css << EOF
+/* remove window title from Client-Side Decorations */
+.solid-csd headerbar .title {
+    font-size: 0;
+}
+
+/* hide extra window decorations/double border */
+window decoration {
+    margin: 0;
+    border: none;
+    padding: 0;
+}
+
+* {
+  text-shadow: none;
+}
+EOF
+done 
+
+# cursor
+if [ ! -d $HOME/.icons ] ; then 
+  mkdir $HOME/.icons
+fi
+
+wget "https://github.com/alvatip/Nordzy-cursors/releases/download/v0.6.0/Nordzy-cursors-white.tar.gz"
+tar xzf Nordzy-cursors-white.tar.gz
+rm Nordzy-cursors-white.tar.gz
+mv Nordzy-cursors-white $HOME/.icons
+
+# icons
+git clone https://github.com/bikass/kora.git
+mv ./kora/kora* $HOME/.icons
+rm kora -rdf
+
+cat > $HOME/.config/gtk-3.0/settings.ini << EOF
+[Settings]
+gtk-theme-name=Catppuccin-Mocha-Standard-Lavender-dark
+gtk-icon-theme-name=kora
+gtk-font-name=JetBrainsMono Nerd Font Light 9
+gtk-cursor-theme-name=Nordzy-cursors-white
+gtk-cursor-theme-size=0
+gtk-toolbar-style=GTK_TOOLBAR_BOTH
+gtk-toolbar-icon-size=GTK_ICON_SIZE_LARGE_TOOLBAR
+gtk-button-images=0
+gtk-menu-images=0
+gtk-enable-event-sounds=0
+gtk-enable-input-feedback-sounds=0
+gtk-xft-antialias=1
+gtk-xft-hinting=1
+gtk-xft-hintstyle=hintfull
+gtk-xft-rgba=none
+EOF
+
 
