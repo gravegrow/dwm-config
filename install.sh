@@ -57,7 +57,7 @@ packages=(
 
   # misc
   qbittorrent keepassxc blueman 
-  gnome-calculator gnome-calendar
+  gnome-calculator gnome-calendar gnome-disk-utility
   zathura zathura-pdf-poppler
 
   # display manager
@@ -160,11 +160,14 @@ if [ ! -f /usr/bin/nvim ] ; then
   cp -rf /usr/local/share/applications/nvim.desktop $HOME/.local/share/applications/
   sed -i 's/Exec=nvim %F/Exec=kitty -e nvim %F/g' $HOME/.local/share/applications/nvim.desktop
   sed -i 's/Terminal=true/Terminal=false/g' $HOME/.local/share/applications/nvim.desktop  
-  sudo nala install python3-neovim -y
+  sudo nala install python3-pynvim -y
 fi
 
 
 # Set fish as default shell
+if [ ! -d $HOME/.ssh ] ; then
+    mkdir -p $HOME/.ssh
+fi
 sudo chsh $USER -s $(which fish)
 
 
@@ -258,6 +261,12 @@ window decoration {
     margin: 0;
     border: none;
     padding: 0;
+}
+
+.background {
+  margin: 0;
+  padding: 0;
+  box-shadow: 0 0 0 0;
 }
 
 * {
