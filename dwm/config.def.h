@@ -50,6 +50,7 @@ static const char *const autostart[] = {
   "setxkbmap", "us,ru", "-option", "grp:alt_space_toggle", NULL,
   "dwmblocks", NULL,
 	"dunst", NULL,
+  "/usr/lib/polkit-gnome/polkit-gnome-authentication-agent-1", NULL, 
 	NULL /* terminate */
 };
 

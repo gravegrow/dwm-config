@@ -61,6 +61,9 @@ packages=(
   # display manager
   lightdm
 
+  # polkit
+  policykit-1-gnome
+
   # dwm build requirements
   make build-essential libx11-dev libxft-dev libimlib2-dev libxinerama-dev xinit libx11-xcb-dev libxcb-res0-dev
 )
