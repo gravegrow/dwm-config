@@ -57,6 +57,7 @@ packages=(
   qbittorrent keepassxc blueman 
   gnome-calculator gnome-calendar gnome-disk-utility
   zathura zathura-pdf-poppler
+  gpick flameshot
 
   # display manager
   lightdm
