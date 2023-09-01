@@ -19,7 +19,7 @@ packages=(
   fish kitty tmux
 
   # editor
-  # vim 
+  vim 
 
   # launchers
   rofi suckless-tools
@@ -59,9 +59,6 @@ packages=(
   zathura zathura-pdf-poppler
   gpick flameshot krita
 
-  # display manager
-  lightdm lightdm-gtk-greeter-settings
-
   # polkit
   policykit-1-gnome
 
@@ -69,7 +66,10 @@ packages=(
   make build-essential libx11-dev libxft-dev libimlib2-dev libxinerama-dev xinit libx11-xcb-dev libxcb-res0-dev
 )
 
-sudo nala install ${packages[@]} -y
+sudo nala install ${packages[@]} -y 
+
+# display manager
+sudo nala install sddm --no-install-recommends -y
 
 # NIX
 # curl -L https://nixos.org/nix/install | sh -s -- --daemon --yes
@@ -78,15 +78,21 @@ sudo nala install ${packages[@]} -y
 #   . '/nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh'
 # fi
 
+# sddm theming
+if [ ! -d /usr/share/sddm/themes/ ] ; then
+  sudo mkdir /usr/share/sddm/themes/
+fi
 
-# Setup lightdm session-wrapper so it can source .profile
-wget https://raw.githubusercontent.com/canonical/lightdm/master/debian/lightdm-session
-chmod +x lightdm-session
-sudo mv lightdm-session /usr/sbin/lightdm-session
+git clone https://github.com/catppuccin/sddm.git
+sudo mv ./src/catppuccin-mocha /usr/share/sddm/themes/
+rm sddm -rdf
 
-sudo sed -i 's/#greeter-hide-users=false/greeter-hide-users=false/g' /etc/lightdm/lightdm.conf
-sudo sed -i 's/#user-session=.*/user-session=dwm/g' /etc/lightdm/lightdm.conf
-sudo sed -i 's/#session-wrapper=lightdm-session/session-wrapper=lightdm-session/g' /etc/lightdm/lightdm.conf
+cat > ./tmp << EOF
+[Theme]
+Current=catppuccin-mocha
+EOF
+
+sudo mv ./tmp /etc/sddm.conf
 
 # Setup swap
 sudo sed -i 's/#ALGO.*/ALGO=zstd/g' /etc/default/zramswap
@@ -149,7 +155,7 @@ rm ./tmp
 
 
 # Build Neovim
-if [ ! -f /usr/bin/nvim ] ; then
+if [ ! -f /usr/local/bin/nvim ] ; then
   git clone https://github.com/neovim/neovim
   git -C $BASEDIR/neovim checkout stable
   make -C $BASEDIR/neovim CMAKE_BUILD_TYPE=RelWithDebInfo 
@@ -163,7 +169,8 @@ if [ ! -f /usr/bin/nvim ] ; then
   cp -rf /usr/local/share/applications/nvim.desktop $HOME/.local/share/applications/
   sed -i 's/Exec=nvim %F/Exec=kitty -e nvim %F/g' $HOME/.local/share/applications/nvim.desktop
   sed -i 's/Terminal=true/Terminal=false/g' $HOME/.local/share/applications/nvim.desktop  
-  sudo nala install python3-pynvim -y
+
+  sudo nala install python3-pynvim -y --no-install-recommends
 fi
 
 
