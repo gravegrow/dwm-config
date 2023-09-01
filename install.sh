@@ -192,17 +192,7 @@ sudo chsh $USER -s $(which fish)
 
 
 # Install Starship
-if [ ! command -v starship ] ; then
-  curl -s https://api.github.com/repos/starship/starship/releases/latest \
-    | grep browser_download_url \
-    | grep x86_64-unknown-linux-gnu \
-    | cut -d '"' -f 4 \
-    | wget -qi -
-
-  tar -zxf starship-*.tar.gz
-  sudo mv starship /usr/local/bin/
-  rm starship*
-fi
+curl -sS https://starship.rs/install.sh | sudo sh -s -- --yes
 
 # dotfiles
 if [ -d $HOME/.dotfiles ] ; then
