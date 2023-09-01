@@ -40,6 +40,7 @@ packages=(
   x11-utils psmisc unzip curl  zram-tools 
   btop bat tldr python3-pip ripgrep fd-find 
   virtualenv flatpak mpv wine
+ 	x11-xserver-utils
 
   # picom
   picom
@@ -164,7 +165,7 @@ rm ./tmp
 
 
 # Build Neovim
-if [ ! -f /usr/local/bin/nvim ] ; then
+if [ ! command -v nvim ] ; then
   git clone https://github.com/neovim/neovim
   git -C $BASEDIR/neovim checkout stable
   make -C $BASEDIR/neovim CMAKE_BUILD_TYPE=RelWithDebInfo 
@@ -191,7 +192,7 @@ sudo chsh $USER -s $(which fish)
 
 
 # Install Starship
-if [ ! -f /usr/local/bin/starship ] ; then
+if [ ! command -v starship ] ; then
   curl -s https://api.github.com/repos/starship/starship/releases/latest \
     | grep browser_download_url \
     | grep x86_64-unknown-linux-gnu \
@@ -249,28 +250,28 @@ if [ ! -d $HOME/.local/share/fonts/JetBrainsMono ]; then
   rm JetBrainsMono.zip 
 fi
 
-if [ ! -d $HOME/.local/share/themes ] ; then 
-  mkdir $HOME/.local/share/themes
+
+THEMES_DIR=/usr/share/themes
+
+if [ ! -d $THEMES_DIR ] ; then 
+  mkdir $THEMES_DIR
 fi
 
 # gtk
-mkdir -p "$HOME/.config/gtk-3.0"
-mkdir -p "$HOME/.config/gtk-4.0"
 
 THEME=Catppuccin-Mocha-Standard-Lavender-dark
-THEME_DIR=$HOME/.local/share/themes/$THEME
-
+CAT_THEME=$THEMES_DIR/$THEME
 wget "https://github.com/catppuccin/gtk/releases/download/v0.6.1/$THEME.zip"
-unzip -oq "$THEME.zip" -d $HOME/.local/share/themes/
+sudo unzip -oq "$THEME.zip" -d $THEMES_DIR
 rm "$THEME.zip"
 
-ln -sf "$THEME_DIR/gtk-4.0/assets" "$HOME/.config/gtk-4.0/assets"
-ln -sf "$THEME_DIR/gtk-4.0/gtk.css" "$HOME/.config/gtk-4.0/gtk.css"
-ln -sf "$THEME_DIR/gtk-4.0/gtk-dark.css" "$HOME/.config/gtk-4.0/gtk-dark.css"
+sudo ln -sf "$CAT_THEME/gtk-4.0/assets" "$HOME/.config/gtk-4.0/assets"
+sudo ln -sf "$CAT_THEME/gtk-4.0/gtk.css" "$HOME/.config/gtk-4.0/gtk.css"
+sudo ln -sf "$CAT_THEME/gtk-4.0/gtk-dark.css" "$HOME/.config/gtk-4.0/gtk-dark.css"
 
 for ver in "gtk-3.0" "gtk-4.0"
 do
-cat >> $THEME_DIR/$ver/gtk.css << EOF
+cat >> $CAT_THEME/$ver/gtk.css << EOF
 /* remove window title from Client-Side Decorations */
 .solid-csd headerbar .title {
     font-size: 0;
@@ -292,25 +293,46 @@ window decoration {
 * {
   text-shadow: none;
 }
+
+/* Always use background color */
+GtkWindow {
+    background-color: @theme_bg_color;
+}
+
+/* Fix tooltip background override */
+.tooltip {
+    background-color: rgba(0, 0, 0, 0.8);
+}
+
+.tooltip * {
+    background-color: transparent;
+}
 EOF
 done 
 
 # cursor
-if [ ! -d $HOME/.local/share/icons ] ; then 
-  mkdir $HOME/.local/share/icons -p
+if [ ! -d /usr/share/icons ] ; then 
+  mkdir /usr/share/icons -p
 fi
 
 wget "https://github.com/alvatip/Nordzy-cursors/releases/download/v0.6.0/Nordzy-cursors-white.tar.gz"
 tar xzf Nordzy-cursors-white.tar.gz
-mv Nordzy-cursors-white $HOME/.local/share/icons/
+sudo mv Nordzy-cursors-white /usr/share/icons/
 rm Nordzy-cursors-white* -rdf
+
+if [ ! -f $HOME/.Xresources ] ; then 
+  touch $HOME/.Xresources
+fi
+
+echo "Xcursor.theme: Nordzy-cursors-white" | tee --append ~/.Xresources
 
 # icons
 git clone https://github.com/bikass/kora.git
-mv ./kora/kora* $HOME/.local/share/icons/
+sudo mv ./kora/kora* /usr/share/icons/
 rm kora -rdf
 
-cat > $HOME/.config/gtk-3.0/settings.ini << EOF
+
+cat > ./tmp << EOF
 [Settings]
 gtk-theme-name=Catppuccin-Mocha-Standard-Lavender-dark
 gtk-icon-theme-name=kora
@@ -329,8 +351,8 @@ gtk-xft-hintstyle=hintfull
 gtk-xft-rgba=none
 EOF
 
-sudo cp ~/.local/share/themes/* /usr/share/themes/
-sudo cp ~/.local/share/icons/* /usr/share/icons/
+sudo mv ./tmp /etc/gtk-3.0/settings.ini
+
 
 # plymouth and grub
 git clone https://github.com/vikashraghavan/dotLock.git
@@ -342,9 +364,9 @@ sudo sed -i 's/#GRUB_GFXMODE=.*/GRUB_GFXMODE=1920x1080x32/g' /etc/default/grub
 sudo sed -i 's/GRUB_CMDLINE_LINUX_DEFAULT=.*/GRUB_CMDLINE_LINUX_DEFAULT="quiet splash"/g' /etc/default/grub
 sudo sed -i 's/GRUB_TIMEOUT=.*/GRUB_TIMEOUT=0/g' /etc/default/grub
 
-convert -size 32x32 xc:black empty.png
-sudo mv empty.png /boot/grub/
-sudo sed -i 's/WALLPAPER=.*/WALLPAPER=/boot/grub/empty.png/g' /usr/share/desktop-base/active-theme/grub/grub_background.sh
+# convert -size 32x32 xc:black empty.png
+# sudo mv empty.png /boot/grub/
+# sudo sed -i 's/WALLPAPER=.*/WALLPAPER=/boot/grub/empty.png/g' /usr/share/desktop-base/active-theme/grub/grub_background.sh
 
 sudo update-grub2
 
