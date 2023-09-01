@@ -39,7 +39,7 @@ packages=(
   # utils
   x11-utils psmisc unzip curl  zram-tools 
   btop bat tldr python3-pip ripgrep fd-find 
-  virtualenv flatpak
+  virtualenv flatpak mpv wine
 
   # picom
   picom
@@ -57,10 +57,10 @@ packages=(
   qbittorrent keepassxc blueman 
   gnome-calculator gnome-calendar gnome-disk-utility
   zathura zathura-pdf-poppler
-  gpick flameshot
+  gpick flameshot krita
 
   # display manager
-  lightdm
+  lightdm lightdm-gtk-greeter-settings
 
   # polkit
   policykit-1-gnome
@@ -85,6 +85,7 @@ chmod +x lightdm-session
 sudo mv lightdm-session /usr/sbin/lightdm-session
 
 sudo sed -i 's/#greeter-hide-users=false/greeter-hide-users=false/g' /etc/lightdm/lightdm.conf
+sudo sed -i 's/#user-session=.*/user-session=dwm/g' /etc/lightdm/lightdm.conf
 sudo sed -i 's/#session-wrapper=lightdm-session/session-wrapper=lightdm-session/g' /etc/lightdm/lightdm.conf
 
 # Setup swap
@@ -311,6 +312,9 @@ gtk-xft-hinting=1
 gtk-xft-hintstyle=hintfull
 gtk-xft-rgba=none
 EOF
+
+sudo cp ~/.themes/* /usr/share/themes/
+sudo cp ~/.icons/* /usr/share/icons/
 
 # plymouth and grub
 git clone https://github.com/vikashraghavan/dotLock.git
