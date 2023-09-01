@@ -215,6 +215,7 @@ curl -sSL https://install.python-poetry.org | python3 -
 
 # nemo 
 xdg-mime default nemo.desktop inode/directory application/x-gnome-saved-search
+gsettings set org.cinnamon.desktop.default-applications.terminal exec kitty
 gsettings set org.gnome.desktop.default-applications.terminal exec kitty
 gsettings set org.nemo.desktop show-desktop-icons false
 
