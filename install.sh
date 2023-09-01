@@ -84,7 +84,7 @@ if [ ! -d /usr/share/sddm/themes/ ] ; then
 fi
 
 git clone https://github.com/catppuccin/sddm.git
-sudo mv ./src/catppuccin-mocha /usr/share/sddm/themes/
+sudo mv ./sddm/src/catppuccin-mocha /usr/share/sddm/themes/
 rm sddm -rdf
 
 cat > ./tmp << EOF
@@ -240,8 +240,8 @@ if [ ! -d $HOME/.local/share/fonts/JetBrainsMono ]; then
   rm JetBrainsMono.zip 
 fi
 
-if [ ! -d $HOME/.themes ] ; then 
-  mkdir $HOME/.themes
+if [ ! -d $HOME/.local/share/themes ] ; then 
+  mkdir $HOME/.local/share/themes
 fi
 
 # gtk
@@ -249,10 +249,10 @@ mkdir -p "$HOME/.config/gtk-3.0"
 mkdir -p "$HOME/.config/gtk-4.0"
 
 THEME=Catppuccin-Mocha-Standard-Lavender-dark
-THEME_DIR=$HOME/.themes/$THEME
+THEME_DIR=$HOME/.local/share/themes/$THEME
 
 wget "https://github.com/catppuccin/gtk/releases/download/v0.6.1/$THEME.zip"
-unzip -oq "$THEME.zip" -d $HOME/.themes/
+unzip -oq "$THEME.zip" -d $HOME/.local/share/themes/
 rm "$THEME.zip"
 
 ln -sf "$THEME_DIR/gtk-4.0/assets" "$HOME/.config/gtk-4.0/assets"
@@ -287,18 +287,18 @@ EOF
 done 
 
 # cursor
-if [ ! -d $HOME/.icons ] ; then 
-  mkdir $HOME/.icons
+if [ ! -d $HOME/.local/share/icons ] ; then 
+  mkdir $HOME/.local/share/icons -p
 fi
 
 wget "https://github.com/alvatip/Nordzy-cursors/releases/download/v0.6.0/Nordzy-cursors-white.tar.gz"
 tar xzf Nordzy-cursors-white.tar.gz
-mv Nordzy-cursors-white $HOME/.icons
+mv Nordzy-cursors-white $HOME/.local/share/icons/
 rm Nordzy-cursors-white* -rdf
 
 # icons
 git clone https://github.com/bikass/kora.git
-mv ./kora/kora* $HOME/.icons
+mv ./kora/kora* $HOME/.local/share/icons/
 rm kora -rdf
 
 cat > $HOME/.config/gtk-3.0/settings.ini << EOF
@@ -320,8 +320,8 @@ gtk-xft-hintstyle=hintfull
 gtk-xft-rgba=none
 EOF
 
-sudo cp ~/.themes/* /usr/share/themes/
-sudo cp ~/.icons/* /usr/share/icons/
+sudo cp ~/.local/share/themes/* /usr/share/themes/
+sudo cp ~/.local/share/icons/* /usr/share/icons/
 
 # plymouth and grub
 git clone https://github.com/vikashraghavan/dotLock.git
