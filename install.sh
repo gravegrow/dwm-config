@@ -1,14 +1,9 @@
 #!/bin/bash
 
-# Check if running as root
-# if [ "$EUID" -ne 0 ]
-#   then echo "Please run as root"
-#   exit
-# fi
-
 sudo apt update -y
 sudo apt upgrade -y
 # Set console font
+
 sudo apt install fonts-terminus -y
 setfont /usr/share/consolefonts/CyrAsia-TerminusBold22x11.psf.gz
 
@@ -28,7 +23,7 @@ packages=(
   ranger nemo exa 
 
   # theming
-  feh lxappearance qt6ct plymouth-themes imagemagick
+  feh lxappearance qt6ct plymouth-themes
    
   # notifications
   dunst libnotify-bin
@@ -65,7 +60,6 @@ packages=(
 
   # dwm build requirements
   make build-essential libx11-dev libxft-dev libimlib2-dev libxinerama-dev xinit libx11-xcb-dev libxcb-res0-dev
-
 )
 
 sudo nala install ${packages[@]}  -y
@@ -81,12 +75,6 @@ packages=(
 
 sudo nala install ${packages[@]} --no-install-recommends -y
 
-# NIX
-# curl -L https://nixos.org/nix/install | sh -s -- --daemon --yes
-#
-# if [ -e '/nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh' ]; then
-#   . '/nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh'
-# fi
 
 # sddm theming
 if [ ! -d /usr/share/sddm/themes/ ] ; then
@@ -165,7 +153,7 @@ rm ./tmp
 
 
 # Build Neovim
-if [ ! command -v nvim ] ; then
+if ! command -v nvim ; then
   git clone https://github.com/neovim/neovim
   git -C $BASEDIR/neovim checkout stable
   make -C $BASEDIR/neovim CMAKE_BUILD_TYPE=RelWithDebInfo 
@@ -192,7 +180,9 @@ sudo chsh $USER -s $(which fish)
 
 
 # Install Starship
+if ! command -v starship ; then
 curl -sS https://starship.rs/install.sh | sudo sh -s -- --yes
+fi
 
 # dotfiles
 if [ -d $HOME/.dotfiles ] ; then
@@ -227,6 +217,23 @@ gsettings set org.cinnamon.desktop.default-applications.terminal exec kitty
 gsettings set org.gnome.desktop.default-applications.terminal exec kitty
 gsettings set org.nemo.desktop show-desktop-icons false
 
+cat > ~/.config/user-dirs.dirs << EOF
+XDG_DESKTOP_DIR="$HOME/Desktop"
+XDG_DOWNLOAD_DIR="$HOME/Downloads"
+XDG_PICTURES_DIR="$HOME/Pictures"
+XDG_PUBLICSHARE_DIR="$HOME/.publicshare"
+XDG_DOCUMENTS_DIR="$HOME/.misc"
+XDG_MUSIC_DIR="$HOME/.misc"
+XDG_TEMPLATES_DIR="$HOME/.templates"
+XDG_VIDEOS_DIR="$HOME/.misc"
+EOF
+
+for dir in "Desktop" "Pictures" "Downloads" ".publicshare" ".misc" ".templates"
+do
+  mkdir $HOME/$dir 
+done
+
+xdg-user-dirs-update
 
 # fonts
 if [ ! -d $HOME/.local/share/fonts ] ; then
@@ -354,11 +361,14 @@ sudo sed -i 's/#GRUB_GFXMODE=.*/GRUB_GFXMODE=1920x1080x32/g' /etc/default/grub
 sudo sed -i 's/GRUB_CMDLINE_LINUX_DEFAULT=.*/GRUB_CMDLINE_LINUX_DEFAULT="quiet splash"/g' /etc/default/grub
 sudo sed -i 's/GRUB_TIMEOUT=.*/GRUB_TIMEOUT=0/g' /etc/default/grub
 
-# convert -size 32x32 xc:black empty.png
-# sudo mv empty.png /boot/grub/
-# sudo sed -i 's/WALLPAPER=.*/WALLPAPER=/boot/grub/empty.png/g' /usr/share/desktop-base/active-theme/grub/grub_background.sh
-
 sudo update-grub2
 
 # flatpak
 sudo flatpak remote-add --if-not-exists flathub https://dl.flathub.org/repo/flathub.flatpakrepo
+
+# nix
+curl -L https://nixos.org/nix/install | sh -s -- --daemon --yes
+
+if [ -e '/nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh' ]; then
+  . '/nix/var/nix/profiles/default/etc/profile.d/nix-daemon.sh'
+fi
