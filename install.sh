@@ -64,12 +64,13 @@ packages=(
 
   # dwm build requirements
   make build-essential libx11-dev libxft-dev libimlib2-dev libxinerama-dev xinit libx11-xcb-dev libxcb-res0-dev
+
+  # display manager
+  sddm qml-module-qtquick-layouts qml-module-qtgraphicaleffects qml-module-qtquick-controls2 libqt5svg5
 )
 
-sudo nala install ${packages[@]} -y 
+sudo nala install ${packages[@]} --no-install-recommends -y
 
-# display manager
-sudo nala install sddm --no-install-recommends -y
 
 # NIX
 # curl -L https://nixos.org/nix/install | sh -s -- --daemon --yes
