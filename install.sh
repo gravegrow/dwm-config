@@ -23,7 +23,7 @@ packages=(
   ranger nemo exa 
 
   # theming
-  feh lxappearance qt6ct plymouth-themes
+  feh lxappearance qt5ct qt6ct plymouth-themes
    
   # notifications
   dunst libnotify-bin
