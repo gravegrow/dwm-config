@@ -23,7 +23,7 @@ packages=(
   ranger nemo exa 
 
   # theming
-  feh lxappearance qt5ct qt6ct plymouth-themes
+  feh lxappearance qt5ct plymouth-themes
    
   # notifications
   dunst libnotify-bin
@@ -255,57 +255,70 @@ if [ ! -d $THEMES_DIR ] ; then
 fi
 
 # gtk
-
 THEME=Catppuccin-Mocha-Standard-Lavender-dark
 CAT_THEME=$THEMES_DIR/$THEME
 wget "https://github.com/catppuccin/gtk/releases/download/v0.6.1/$THEME.zip"
 sudo unzip -oq "$THEME.zip" -d $THEMES_DIR
 rm "$THEME.zip"
 
-sudo ln -sf "$CAT_THEME/gtk-4.0/assets" "$HOME/.config/gtk-4.0/assets"
-sudo ln -sf "$CAT_THEME/gtk-4.0/gtk.css" "$HOME/.config/gtk-4.0/gtk.css"
-sudo ln -sf "$CAT_THEME/gtk-4.0/gtk-dark.css" "$HOME/.config/gtk-4.0/gtk-dark.css"
+sudo ln -sf "$CAT_THEME/gtk-4.0/" "$HOME/.config/"
 
-for ver in "gtk-3.0" "gtk-4.0"
-do
-cat >> $CAT_THEME/$ver/gtk.css << EOF
-/* remove window title from Client-Side Decorations */
-.solid-csd headerbar .title {
-    font-size: 0;
-}
 
-/* hide extra window decorations/double border */
-window decoration {
-    margin: 0;
-    border: none;
-    padding: 0;
-}
-
+cat << EOF | sudo tee --append "$CAT_THEME/gtk-4.0/gtk.css"
 .background {
   margin: 0;
   padding: 0;
   box-shadow: 0 0 0 0;
 }
-
-* {
-  text-shadow: none;
-}
-
-/* Always use background color */
-GtkWindow {
-    background-color: @theme_bg_color;
-}
-
-/* Fix tooltip background override */
-.tooltip {
-    background-color: rgba(0, 0, 0, 0.8);
-}
-
-.tooltip * {
-    background-color: transparent;
-}
 EOF
-done 
+
+echo "##############"
+echo "##############"
+
+# qt
+sudo nala install breeze --no-install-recommends -y
+
+git clone https://github.com/catppuccin/qt5ct.git
+sudo mv ./qt5ct/themes/Catppuccin-Mocha.conf /usr/share/qt5ct/colors/
+rm gt5ct/ -rdf
+
+cat << EOF | tee ~/.config/qt5ct/qt5ct.conf
+[Appearance]
+color_scheme_path=/usr/share/qt5ct/colors/Catppuccin-Mocha.conf
+custom_palette=true
+icon_theme=kora
+standard_dialogs=gtk3
+style=Breeze
+
+[Fonts]
+fixed=@Variant(\0\0\0@\0\0\0\x38\0J\0\x65\0t\0\x42\0r\0\x61\0i\0n\0s\0M\0o\0n\0o\0 \0N\0\x65\0r\0\x64\0 \0\x46\0o\0n\0t\0 \0M\0o\0n\0o@ \0\0\0\0\0\0\xff\xff\xff\xff\x5\x1\0\x39\x10)
+general=@Variant(\0\0\0@\0\0\0.\0J\0\x65\0t\0\x42\0r\0\x61\0i\0n\0s\0M\0o\0n\0o\0 \0N\0\x65\0r\0\x64\0 \0\x46\0o\0n\0t@ \0\0\0\0\0\0\xff\xff\xff\xff\x5\x1\0\x39\x10)
+
+[Interface]
+activate_item_on_single_click=1
+buttonbox_layout=0
+cursor_flash_time=1000
+dialog_buttons_have_icons=0
+double_click_interval=400
+gui_effects=@Invalid()
+keyboard_scheme=2
+menus_have_icons=true
+show_shortcuts_in_context_menus=false
+stylesheets=@Invalid()
+toolbutton_style=0
+underline_shortcut=0
+wheel_scroll_lines=3
+
+[PaletteEditor]
+geometry=@ByteArray(\x1\xd9\xd0\xcb\0\x3\0\0\0\0\x3\xc0\0\0\x1\xf\0\0\x6\x38\0\0\x3!\0\0\x3\xc1\0\0\x1\x10\0\0\x6\x37\0\0\x3 \0\0\0\0\0\0\0\0\n\0\0\0\x3\xc1\0\0\x1\x10\0\0\x6\x37\0\0\x3 )
+
+[SettingsWindow]
+geometry=@ByteArray(\x1\xd9\xd0\xcb\0\x3\0\0\0\0\x6\xa0\0\0\0!\0\0\t\xf8\0\0\x4\x30\0\0\x6\xa1\0\0\0\"\0\0\t\xf7\0\0\x4/\0\0\0\0\0\0\0\0\n\0\0\0\x6\xa1\0\0\0\"\0\0\t\xf7\0\0\x4/)
+
+[Troubleshooting]
+force_raster_widgets=1
+ignored_applications=@Invalid()
+EOF
 
 # cursor
 if [ ! -d /usr/share/icons ] ; then 
