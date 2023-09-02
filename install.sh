@@ -282,7 +282,11 @@ git clone https://github.com/catppuccin/qt5ct.git
 sudo mv ./qt5ct/themes/Catppuccin-Mocha.conf /usr/share/qt5ct/colors/
 rm gt5ct/ -rdf
 
-cat << EOF | tee ~/.config/qt5ct/qt5ct.conf
+if [ ! -d $HOME/.config/qt5ct ] ; then
+  mkdir $HOME/.config/qt5ct
+fi
+
+cat << EOF | tee $HOME/.config/qt5ct/qt5ct.conf
 [Appearance]
 color_scheme_path=/usr/share/qt5ct/colors/Catppuccin-Mocha.conf
 custom_palette=true
