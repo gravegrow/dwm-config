@@ -12,8 +12,8 @@ static const unsigned int systrayiconsize = 16; /* systray icon size in px */
 
 static const int swallowfloating    = 0;        /* 1 means swallow floating windows by default */
 
-static const unsigned int gappx     = 7;        /* gaps between windows */
-static const int vertpad            = gappx;       /* vertical padding of bar */
+static const unsigned int gappx     = 8;        /* gaps between windows */
+static const int vertpad            = 0;       /* vertical padding of bar */
 static const int sidepad            = gappx;       /* horizontal padding of bar */
 
 static const int barpad             = 3;       /* horizontal padding of bar */
@@ -21,8 +21,8 @@ static const int user_bh            = 4;        /* 2 is the default spacing arou
 
 static const int showbar            = 1;        /* 0 means no bar */
 static const int topbar             = 1;        /* 0 means bottom bar */
-static const char *fonts[]          = { "JetBrainsMono Nerd Font:style:medium:size=8" };
-static const char dmenufont[]       = "JetBrainsMono Nerd Font:style:medium:size=13";
+static const char *fonts[]          = { "JetBrainsMono Nerd Font:style:light:size=12" };
+static const char dmenufont[]       = "JetBrainsMono Nerd Font:style:medium:size=12";
 
 static const unsigned int ulinepad	= 5;	/* horizontal padding between the underline and tag */
 static const unsigned int ulinestroke	= 2;	/* thickness / height of the underline */
@@ -59,13 +59,13 @@ static const char *tags[] = { "1", "2", "3", "4", "5", "6", "7", "8", "9" };
 
 static const char *tagsel[][2] = {
 	{ color_blue, color_bg },
+	{ "#f38ba8", color_bg },
+	{ "#a6e3a1", color_bg },
 	{ color_blue, color_bg },
-	{ color_blue, color_bg },
-	{ color_blue, color_bg },
-	{ color_blue, color_bg },
-	{ color_blue, color_bg },
-	{ color_blue, color_bg },
-	{ color_blue, color_bg },
+	{ "#f9e2af", color_bg },
+	{ "#fab387", color_bg },
+	{ "#cba6f7", color_bg },
+	{ "#b4befe", color_bg },
 	{ color_blue, color_bg },
 };
 
@@ -75,11 +75,16 @@ static const Rule rules[] = {
 	 *	WM_NAME(STRING) = title
 	 */
 	/* class     instance  title           tags mask  isfloating  isterminal  noswallow  monitor */
-	{ "Gimp",    NULL,     NULL,           0,         1,          0,           0,        -1 },
-	{ "Firefox", NULL,     NULL,           0,         0,          0,           0,        -1 },
-	{ "kitty",   NULL,     NULL,           0,         0,          1,           0,        -1 },
+	{ "Gimp",                                NULL,     NULL,           0,         1,          0,           0,        -1 },
+	{ "Lutris",                              NULL,     NULL,         1<<5,        1,          0,           0,        -1 },
+	{ "gnome-calculator",                    NULL,     NULL,           0,         1,          0,           0,        -1 },
+	{ "gnome-calendrar",                     NULL,     NULL,           0,         1,          0,           0,        -1 },
+	{ "Firefox",                             NULL,     NULL,           0,         0,          0,           0,        -1 },
+	{ "KeePassXC",                           NULL,     NULL,         1<<5,        0,          0,           0,         1 },
+	{ "kitty",                               NULL,     NULL,           0,         0,          1,           0,        -1 },
+	{ "polkit-gnome-authentication-agent-1", NULL,     NULL,           0,         1,          0,           0,        -1 },
+
 	{ NULL,      NULL,     "Event Tester", 0,         0,          0,           1,        -1 }, /* xev */
-	{ "polkit-gnome-authentication-agent-1",NULL,     NULL,           0,         1,          0,           0,        -1 },
 };
 
 /* layout(s) */
@@ -122,6 +127,7 @@ static const char *dmenucmd[] = { "dmenu_run", "-m", dmenumon, "-fn", dmenufont,
 static const char *termcmd[]  = { "kitty", NULL };
 static const char *browsercmd[]  = { "firefox", NULL };
 static const char *roficmd[]  = { "rofi", "-show", "drun", NULL };
+static const char *gpickcmd[]  = { "dwm-gpick", NULL };
 static const char *filesguicmd[]  = { "nemo", NULL };
 static const char *filestuicmd[]  = { "kitty", "-e", "ranger", NULL };
 
@@ -131,6 +137,7 @@ static const Key keys[] = {
 	{ MODKEY,                       XK_space,  spawn,          {.v = roficmd} },
 	{ MODKEY,                       XK_Return, spawn,          {.v = termcmd } },
 	{ MODKEY,                       XK_f,      spawn,          {.v = browsercmd} },
+	{ MODKEY,                       XK_c,      spawn,          {.v = gpickcmd} },
 	{ MODKEY,                       XK_e,      spawn,          {.v = filestuicmd} },
 	{ MODKEY|ShiftMask,             XK_e,      spawn,          {.v = filesguicmd} },
 	{ MODKEY,                       XK_b,      togglebar,      {0} },
