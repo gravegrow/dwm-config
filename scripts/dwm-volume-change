@@ -8,16 +8,16 @@ function volume-change() {
     value="0%+"
     
     if wpctl get-volume @DEFAULT_AUDIO_SINK@ | grep -q "MUTED" ; then
-      # notify-send "Muted"
-      return 
+      notify-send "Muted" -h string:private-synchronous:volume -t 2000 -h string:fgcolor:#EBA0AC
+      return  
     fi
   fi
 
   wpctl set-mute @DEFAULT_AUDIO_SINK@ 0
   wpctl set-volume @DEFAULT_AUDIO_SINK@ $value
 
-  # volume=$(wpctl get-volume @DEFAULT_AUDIO_SINK@ | sed "s/[^0-9]*//g" | sed "s/^0*//")
-  # notify-send "Volume: $volume%"
+  volume=$(wpctl get-volume @DEFAULT_AUDIO_SINK@ | sed "s/[^0-9]*//g" | sed "s/^0*//")
+  notify-send "Volume: $volume%" -h int:value:$volume -h string:private-synchronous:volume -t 2000
 }
 
 volume-change

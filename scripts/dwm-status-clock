@@ -1,9 +1,9 @@
 #!/bin/bash
 
 case $BUTTON in 
-  1) notify-send "clock 1";;
-  2) notify-send "clock 2";;
-  3) notify-send "clock 3";;
+  1) gnome-calendar;;
+  # 2) notify-send "clock 2";;
+  # 3) notify-send "clock 3";;
 esac
 
 barcolor=#11111A
@@ -12,10 +12,10 @@ panelcolor=#1E2030
 
 if [[ $1 ]]
 then
-  printf "^b$widgetcolor^^c$barcolor^ "
+  printf "^c$widgetcolor^^b$barcolor^ "
   printf "󰃰"
 else
-  printf "^c$widgetcolor^^b$panelcolor^ "
+  printf "^c$widgetcolor^^b$barcolor^ "
   date "+%d %a %H:%M"
 fi
 
