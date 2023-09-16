@@ -1,0 +1,12 @@
+#!/bin/bash
+
+if [ ! -d $HOME/screenshots ] ; then
+  mkdir $HOME/screenshots
+fi 
+
+id=
+file=$HOME/screenshots/$(date +'%d-%m-%Y_%H-%-M-%S').png
+
+flameshot screen -p $file
+
+dunstify Screenshot $(basename $file) --icon=$file --appname="flameshot"

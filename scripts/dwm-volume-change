@@ -18,6 +18,8 @@ function volume-change() {
 
   volume=$(wpctl get-volume @DEFAULT_AUDIO_SINK@ | sed "s/[^0-9]*//g" | sed "s/^0*//")
   notify-send "Volume: $volume%" -h int:value:$volume -h string:private-synchronous:volume -t 2000
+
+
 }
 
 volume-change

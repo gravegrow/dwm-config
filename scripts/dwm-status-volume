@@ -7,7 +7,7 @@ case $BUTTON in
 esac
 
 barcolor=#11111A
-widgetcolor=#fab387
+widgetcolor=#cba6f7
 panelcolor=#1E2030
 icon="󰕾"
 

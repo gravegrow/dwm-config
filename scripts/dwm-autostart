@@ -4,5 +4,5 @@ xrandr --output DisplayPort-1 --auto --mode "3440x1440_120.00" --set TearFree on
 xrandr --output HDMI-A-0 --right-of DisplayPort-1 --auto --scale 1.3333x1.3333 &
 xset -display :0.0 -dpms && xset -display :0.0 s off && xset -display :0.0 s noblank &
 feh --bg-fill ~/pictures/wallpaper.png &
-picom --experimental-backend &
+picom &
 openrgb -p main.orp &
