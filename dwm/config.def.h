@@ -3,43 +3,31 @@
 /* appearance */
 static const unsigned int borderpx = 1; /* border pixel of windows */
 static const unsigned int snap = 32;    /* snap pixel */
-static const unsigned int systraypinning =
-    0; /* 0: sloppy systray follows selected monitor, >0: pin systray to monitor
-          X */
-static const unsigned int systrayonleft =
-    0; /* 0: systray in the right corner, >0: systray on left of status text */
+static const unsigned int systraypinning = 0; /* 0: sloppy systray follows selected monitor, >0: pin systray to monitor X */
+static const unsigned int systrayonleft = 0; /* 0: systray in the right corner, >0: systray on left of status text */
 static const unsigned int systrayspacing = 2; /* systray spacing */
-static const int systraypinningfailfirst =
-    1; /* 1: if pinning fails, display systray on the first monitor, False:
-          display systray on the last monitor*/
+static const int systraypinningfailfirst = 1; /* 1: if pinning fails, display systray on the first monitor, False: display systray on the last monitor*/
 static const int showsystray = 0;               /* 0 means no systray */
 static const unsigned int systrayiconsize = 16; /* systray icon size in px */
 
-static const int swallowfloating =
-    0; /* 1 means swallow floating windows by default */
+static const int swallowfloating = 0; /* 1 means swallow floating windows by default */
 
 static const unsigned int gappx = 8; /* gaps between windows */
 static const int vertpad = 0;        /* vertical padding of bar */
 static const int sidepad = gappx;    /* horizontal padding of bar */
 
 static const int barpad = 4; /* horizontal padding of bar */
-static const int user_bh =
-    6; /* 2 is the default spacing around the bar's font */
+static const int user_bh = 6; /* 2 is the default spacing around the bar's font */
 
 static const int showbar = 1; /* 0 means no bar */
 static const int topbar = 1;  /* 0 means bottom bar */
 static const char *fonts[] = {"JetBrainsMono Nerd Font:style:light:size=10.5"};
-static const char dmenufont[] =
-    "JetBrainsMono Nerd Font:style:medium:size=12.5";
+static const char dmenufont[] = "JetBrainsMono Nerd Font:style:medium:size=12.5";
 
-static const unsigned int ulinepad =
-    5; /* horizontal padding between the underline and tag */
-static const unsigned int ulinestroke =
-    2; /* thickness / height of the underline */
-static const unsigned int ulinevoffset =
-    1; /* how far above the bottom of the bar the line should appear */
-static const int ulineall =
-    0; /* 1 to show underline on all tags, 0 for just the active ones */
+static const unsigned int ulinepad = 5; /* horizontal padding between the underline and tag */
+static const unsigned int ulinestroke = 2; /* thickness / height of the underline */
+static const unsigned int ulinevoffset = 1; /* how far above the bottom of the bar the line should appear */
+static const int ulineall = 0; /* 1 to show underline on all tags, 0 for just the active ones */
 
 static const char color_bg[] = "#11111a";
 static const char color_fg[] = "#b4befe";
@@ -54,12 +42,9 @@ static const char *colors[][3] = {
 };
 
 static const char *const autostart[] = {
-    "dwmblocks",
-    NULL,
-    "dunst",
-    NULL,
-    "/usr/lib/policykit-1-gnome/polkit-gnome-authentication-agent-1",
-    NULL,
+    "dwmblocks", NULL,
+    "dunst", NULL,
+    "/usr/lib/policykit-1-gnome/polkit-gnome-authentication-agent-1", NULL,
     NULL /* terminate */
 };
 
@@ -77,22 +62,18 @@ static const Rule rules[] = {
      *	WM_CLASS(STRING) = instance, class
      *	WM_NAME(STRING) = title
      */
-    /* class                                instance  title       tags mask
-       isfloating  isterminal  noswallow  monitor */
-    {"Gimp", NULL, NULL, 0, 1, 0, 0, -1},
-    {"Lutris", NULL, NULL, 0, 1, 0, 0, -1},
-    {"steam", NULL, NULL, 1 << 4, 0, 0, 0, -1},
-    {"gnome-calculator", NULL, NULL, 0, 1, 0, 0, -1},
-    {"gnome-calendar", NULL, NULL, 0, 1, 0, 0, -1},
-    {"Firefox", NULL, NULL, 0, 0, 0, 0, -1},
-    {"qBittorrent", NULL, NULL, 1 << 4, 0, 0, 0, 1},
-    {"KeePassXC", NULL, NULL, 1 << 5, 0, 0, 0, 1},
-    {"Spotify", NULL, NULL, 1 << 2, 0, 0, 0, 1},
-    {"kitty", NULL, NULL, 0, 0, 1, 0, -1},
-    {"polkit-gnome-authentication-agent-1", NULL, NULL, 0, 1, 0, 0, -1},
-    {"mpv", NULL, NULL, 0, 0, 0, 0, 0},
-
-    {NULL, NULL, "Event Tester", 0, 0, 0, 1, -1}, /* xev */
+    /* class                                instance  title    tags mask    isfloating  isterminal  noswallow  monitor */
+    {"Gimp",                                NULL,     NULL,    0,           1,          0,          0,         -1},
+    {"Lutris",                              NULL,     NULL,    0,           1,          0,          0,         -1},
+    // {"steam",                               NULL,     NULL,    1 << 4,      0,          0,          0,         -1},
+    {"gnome-calculator",                    NULL,     NULL,    0,           1,          0,          0,         -1},
+    {"gnome-calendar",                      NULL,     NULL,    0,           1,          0,          0,         -1},
+    {"Firefox",                             NULL,     NULL,    0,           0,          0,          0,         -1},
+    {"qBittorrent",                         NULL,     NULL,    1 << 4,      0,          0,          0,          1},
+    {"Spotify",                             NULL,     NULL,    1 << 2,      0,          0,          0,          1},
+    {"kitty",                               NULL,     NULL,    0,           0,          1,          0,         -1},
+    {"mpv",                                 NULL,     NULL,    0,           0,          0,          0,          0},
+    {"polkit-gnome-authentication-agent-1", NULL,     NULL,    0,           1,          0,          0,         -1},
 };
 
 /* layout(s) */
