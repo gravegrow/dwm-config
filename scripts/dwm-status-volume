@@ -1,30 +1,27 @@
 #!/bin/bash
 
-case $BUTTON in 
-  1) dwm-volume-change 5%+;;
-  2) dwm-volume-change "toggle";;
-  3) dwm-volume-change 5%-;;
+case $BUTTON in
+1) dwm-volume-change 5%+ ;;
+2) dwm-volume-change "toggle" ;;
+3) dwm-volume-change 5%- ;;
 esac
 
-barcolor=#11111A
-widgetcolor=#cba6f7
+barcolor=#141110
+widgetcolor=#9CA4AA
 panelcolor=#1E2030
 icon="󰕾"
 
 value="$(wpctl get-volume @DEFAULT_AUDIO_SINK@ | sed "s/[^0-9]*//g" | sed "s/^0*//")%"
-if  wpctl get-volume @DEFAULT_AUDIO_SINK@ | grep -q "MUTED"  ; then
-  widgetcolor=#ED8796
-  value="MUTED"
-  icon="󰝟"
+if wpctl get-volume @DEFAULT_AUDIO_SINK@ | grep -q "MUTED"; then
+	widgetcolor=#ED8796
+	value="MUTED"
+	icon="󰝟"
 fi
 
-
-if [[ $1 ]]
-then
-  printf "^c$widgetcolor^^b$barcolor^"
-  echo $icon
+if [[ $1 ]]; then
+	printf "^c$widgetcolor^^b$barcolor^"
+	echo $icon
 else
-  printf "^c$widgetcolor^^b$barcolor^ "
-  echo $value
+	printf "^c$widgetcolor^^b$barcolor^ "
+	echo "$value"
 fi
-

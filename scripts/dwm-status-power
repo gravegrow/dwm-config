@@ -1,12 +1,12 @@
-#!/bin/bash
+#!/bin/env bash
 
-case $BUTTON in 
-  1) ~/.config/rofi/menus/shutdown.sh;;
-  # 2) notify-send "power 2";;
-  # 3) notify-send "power 3";;
+case $BUTTON in
+1) ~/.config/rofi/menus/shutdown.sh ;;
+	# 2) notify-send "power 2";;
+	# 3) notify-send "power 3";;
 esac
 
-barcolor=#11111A
-widgetcolor=#ED8796
+barcolor=#141110
+widgetcolor=#af9da2
 
 printf "^c$widgetcolor^^b$barcolor^  "

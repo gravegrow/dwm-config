@@ -12,33 +12,34 @@ static const unsigned int systrayiconsize = 16; /* systray icon size in px */
 
 static const int swallowfloating = 0; /* 1 means swallow floating windows by default */
 
-static const unsigned int gappx = 8; /* gaps between windows */
+static const unsigned int gappx = 0; /* gaps between windows */
 static const int vertpad = 0;        /* vertical padding of bar */
 static const int sidepad = gappx;    /* horizontal padding of bar */
 
-static const int barpad = 4; /* horizontal padding of bar */
-static const int user_bh = 6; /* 2 is the default spacing around the bar's font */
+static const int barpad = 0; /* horizontal padding of bar */
+static const int user_bh = 2; /* 2 is the default spacing around the bar's font */
 
 static const int showbar = 1; /* 0 means no bar */
 static const int topbar = 1;  /* 0 means bottom bar */
-static const char *fonts[] = {"JetBrainsMono Nerd Font:style:light:size=10.5"};
-static const char dmenufont[] = "JetBrainsMono Nerd Font:style:medium:size=12.5";
+static const char *fonts[] = {"BerkeleyMono Nerd Font Mono:style:bold:size=10.5"};
 
-static const unsigned int ulinepad = 5; /* horizontal padding between the underline and tag */
-static const unsigned int ulinestroke = 2; /* thickness / height of the underline */
-static const unsigned int ulinevoffset = 1; /* how far above the bottom of the bar the line should appear */
+static const unsigned int ulinepad = 0; /* horizontal padding between the underline and tag */
+static const unsigned int ulinestroke = 0; /* thickness / height of the underline */
+static const unsigned int ulinevoffset = 0; /* how far above the bottom of the bar the line should appear */
 static const int ulineall = 0; /* 1 to show underline on all tags, 0 for just the active ones */
 
-static const char color_bg[] = "#11111a";
+static const char color_bg[] = "#141110";
 static const char color_fg[] = "#b4befe";
 static const char color_blue[] = "#89B4FA";
-static const char color_gray[] = "#45475a";
+static const char color_gray[] = "#9A8F89";
+static const char color_selection[] = "#25211E";
+static const char color_inactive[] = "#2F2A26";
 
 static const char *colors[][3] = {
-    /*               fg         bg         border   */
-    [SchemeNorm] = {color_gray, color_bg, color_bg},
-    [SchemeSel] = {color_gray, color_bg, color_gray},
-    [SchemeTitle] = {color_fg, color_bg, color_bg},
+    /*               fg              bg         border   */
+    [SchemeNorm]  = {color_inactive, color_bg, "#000000"},
+    [SchemeSel]   = {color_gray,     color_bg, color_selection},
+    [SchemeTitle] = {"#80756F",     color_bg, color_bg},
 };
 
 static const char *const autostart[] = {
@@ -52,26 +53,28 @@ static const char *const autostart[] = {
 static const char *tags[] = {"1", "2", "3", "4", "5", "6", "7", "8", "9"};
 
 static const char *tagsel[][2] = {
-    {"#89B4FA", color_bg}, {"#f38ba8", color_bg}, {"#a6e3a1", color_bg},
-    {"#f9e2af", color_bg}, {"#fab387", color_bg}, {"#cba6f7", color_bg},
-    {"#b4befe", color_bg}, {"#89B4FA", color_bg}, {"#89B4FA", color_bg},
+    {"#89B4FA", color_bg},
+    {"#89B4FA", color_bg},
+    {"#89B4FA", color_bg},
+    {"#89B4FA", color_bg},
+    {"#89B4FA", color_bg},
+    {"#89B4FA", color_bg},
+    {"#89B4FA", color_bg},
+    {"#89B4FA", color_bg},
+    {"#89B4FA", color_bg},
 };
 
 static const Rule rules[] = {
-    /* xprop(1):
-     *	WM_CLASS(STRING) = instance, class
-     *	WM_NAME(STRING) = title
-     */
+    /* xprop(1): WM_CLASS(STRING) = instance, class WM_NAME(STRING) = title */
     /* class                                instance  title    tags mask    isfloating  isterminal  noswallow  monitor */
     {"Gimp",                                NULL,     NULL,    0,           1,          0,          0,         -1},
     {"Lutris",                              NULL,     NULL,    0,           1,          0,          0,         -1},
-    // {"steam",                               NULL,     NULL,    1 << 4,      0,          0,          0,         -1},
     {"gnome-calculator",                    NULL,     NULL,    0,           1,          0,          0,         -1},
     {"gnome-calendar",                      NULL,     NULL,    0,           1,          0,          0,         -1},
     {"Firefox",                             NULL,     NULL,    0,           0,          0,          0,         -1},
     {"qBittorrent",                         NULL,     NULL,    1 << 4,      0,          0,          0,          1},
+    {"discord",                             NULL,     NULL,    1 << 1,      0,          0,          0,          1},
     {"Spotify",                             NULL,     NULL,    1 << 2,      0,          0,          0,          1},
-    {"kitty",                               NULL,     NULL,    0,           0,          1,          0,         -1},
     {"mpv",                                 NULL,     NULL,    0,           0,          0,          0,          0},
     {"polkit-gnome-authentication-agent-1", NULL,     NULL,    0,           1,          0,          0,         -1},
 };
@@ -79,10 +82,8 @@ static const Rule rules[] = {
 /* layout(s) */
 static const float mfact = 0.66; /* factor of master area size [0.05..0.95] */
 static const int nmaster = 1;    /* number of clients in master area */
-static const int resizehints =
-    0; /* 1 means respect size hints in tiled resizals */
-static const int lockfullscreen =
-    1; /* 1 will force focus on the fullscreen window */
+static const int resizehints = 0; /* 1 means respect size hints in tiled resizals */
+static const int lockfullscreen = 1; /* 1 will force focus on the fullscreen window */
 
 static const Layout layouts[] = {
     /* symbol     arrange function */
@@ -116,25 +117,19 @@ static const char *downvol[] = {"dwm-volume-change", "5%-", NULL};
 static const char *mutevol[] = {"dwm-volume-change", "toggle", NULL};
 
 /* commands */
-static char dmenumon[2] =
-    "0"; /* component of dmenucmd, manipulated in spawn() */
-static const char *dmenucmd[] = {
-    "dmenu_run", "-m",  dmenumon,   "-fn", dmenufont,  "-nb", color_bg, "-nf",
-    color_fg,    "-sb", color_gray, "-sf", color_blue, NULL};
-static const char *termcmd[] = {"kitty", NULL};
+static const char *termcmd[] = {"wezterm", NULL};
 static const char *browsercmd[] = {"firefox", NULL};
 static const char *privatebrowsercmd[] = {"firefox", "--private-window", NULL};
 static const char *altbrowsercmd[] = {"brave-browser", NULL};
 static const char *roficmd[] = {"rofi", "-show", "drun", NULL};
 static const char *gpickcmd[] = {"dwm-gpick", NULL};
 static const char *filesguicmd[] = {"nemo", NULL};
-static const char *filestuicmd[] = {"kitty", "-e", "ranger", NULL};
+static const char *filestuicmd[] = {"wezterm", "-e", "yazi", NULL};
 static const char *screengrab[] = {"flameshot", "gui", NULL};
 static const char *screenshot[] = {"dwm-screenshot"};
 
 static const Key keys[] = {
     /* modifier                     key        function        argument */
-    {MODKEY, XK_r, spawn, {.v = dmenucmd}},
     {MODKEY, XK_space, spawn, {.v = roficmd}},
     {MODKEY, XK_Return, spawn, {.v = termcmd}},
     {MODKEY, XK_f, spawn, {.v = browsercmd}},

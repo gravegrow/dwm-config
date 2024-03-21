@@ -3,22 +3,21 @@
 value=$1
 
 function volume-change() {
-  if [ $value = "toggle" ] ; then
-    wpctl set-mute @DEFAULT_AUDIO_SINK@ "toggle"
-    value="0%+"
-    
-    if wpctl get-volume @DEFAULT_AUDIO_SINK@ | grep -q "MUTED" ; then
-      # dunstify "Muted" --icon=" " -h string:private-synchronous:volume -t 2000 -h string:fgcolor:#EBA0AC
-      return  
-    fi
-  fi
+	if [ $value = "toggle" ]; then
+		wpctl set-mute @DEFAULT_AUDIO_SINK@ "toggle"
+		value="0%+"
 
-  wpctl set-mute @DEFAULT_AUDIO_SINK@ 0
-  wpctl set-volume @DEFAULT_AUDIO_SINK@ $value
+		if wpctl get-volume @DEFAULT_AUDIO_SINK@ | grep -q "MUTED"; then
+			# dunstify "Muted" --icon=" " -h string:private-synchronous:volume -t 2000 -h string:fgcolor:#EBA0AC
+			return
+		fi
+	fi
 
-  volume=$(wpctl get-volume @DEFAULT_AUDIO_SINK@ | sed "s/[^0-9]*//g" | sed "s/^0*//")
-  # dunstify "Volume: $volume%" --icon=" " -h int:value:$volume -h string:private-synchronous:volume -t 2000
+	wpctl set-mute @DEFAULT_AUDIO_SINK@ 0
+	wpctl set-volume @DEFAULT_AUDIO_SINK@ $value
 
+	volume=$(wpctl get-volume @DEFAULT_AUDIO_SINK@ | sed "s/[^0-9]*//g" | sed "s/^0*//")
+	# dunstify "Volume: $volume%" --icon=" " -h int:value:$volume -h string:private-synchronous:volume -t 2000
 
 }
 

@@ -1,21 +1,27 @@
 #!/bin/bash
 
-case $BUTTON in 
-  1) gnome-calendar;;
-  # 2) notify-send "clock 2";;
-  # 3) notify-send "clock 3";;
+spawn_calendar() {
+	gnome-calendar &
+	pid=''
+	while [[ -z $pid ]]; do
+		pid=$(xdotool search --onlyvisible --class gnome-calendar | grep -Eo '[0-9]+')
+	done
+	xdotool windowmove $pid 2670 20
+}
+
+case $BUTTON in
+1) spawn_calendar ;;
+	# 2) notify-send "clock 2";;
+	# 3) notify-send "clock 3";;
 esac
 
-barcolor=#11111A
-widgetcolor=#8AADF4
-panelcolor=#1E2030
+barcolor=#141110
+widgetcolor=#9cb7c4
 
-if [[ $1 ]]
-then
-  printf "^c$widgetcolor^^b$barcolor^ "
-  printf "󰃰"
+if [[ $1 ]]; then
+	printf "^c$widgetcolor^^b$barcolor^ "
+	printf "󰃰"
 else
-  printf "^c$widgetcolor^^b$barcolor^ "
-  date "+%d %a %H:%M"
+	printf "^c$widgetcolor^^b$barcolor^ "
+	date "+%d %a %H:%M"
 fi
-

@@ -1,8 +1,17 @@
-#!/bin/bash
+#!/bin/env bash
 
-xrandr --output DisplayPort-1 --auto --mode "3440x1440_120.00" --set TearFree on &
+xrandr --output DisplayPort-1 --auto --mode "3440x1440_120.00" &
 xrandr --output HDMI-A-0 --right-of DisplayPort-1 --auto --scale 1.3333x1.3333 &
+
 xset -display :0.0 -dpms && xset -display :0.0 s off && xset -display :0.0 s noblank &
-feh --bg-fill ~/pictures/wallpaper.png &
+feh --bg-fill ~/dotfiles/.local/share/backgrounds/bg.png &
 picom &
-openrgb -p main.orp &
+openrgb -p main &
+
+/usr/libexec/gsd-xsettings &
+gsettings set org.gnome.desktop.interface gtk-theme "Orchis-Dark-Compact" &
+gsettings set org.gnome.desktop.wm.preferences theme "Orchis-Dark-Compact" &
+gsettings set org.gnome.desktop.interface icon-theme 'Papirus-Dark' &
+gsettings set org.gnome.desktop.wm.preferences button-layout : &
+
+setxkbmap -layout us,ru -option grp:alt_space_toggle &
